@@ -20,6 +20,26 @@
                 <span class="help-block">{{ trans('cruds.shop.fields.name_helper') }}</span>
             </div>
             <div class="form-group">
+                <label class="required" for="country_code">{{ trans('cruds.shop.fields.country_code') }}</label>
+                <input class="form-control {{ $errors->has('country_code') ? 'is-invalid' : '' }}" type="text" name="country_code" id="country_code" value="{{ old('country_code', '') }}" required>
+                @if($errors->has('country_code'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('country_code') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.shop.fields.country_code_helper') }}</span>
+            </div>
+            <div class="form-group">
+                <label class="required" for="phone">{{ trans('cruds.shop.fields.phone') }}</label>
+                <input class="form-control {{ $errors->has('phone') ? 'is-invalid' : '' }}" type="text" name="phone" id="phone" value="{{ old('phone', '') }}" required>
+                @if($errors->has('phone'))
+                    <div class="invalid-feedback">
+                        {{ $errors->first('phone') }}
+                    </div>
+                @endif
+                <span class="help-block">{{ trans('cruds.shop.fields.name_helper') }}</span>
+            </div>
+            <div class="form-group">
                 <label for="categories">{{ trans('cruds.shop.fields.categories') }}</label>
                 <div style="padding-bottom: 4px">
                     <span class="btn btn-info btn-xs select-all" style="border-radius: 0">{{ trans('global.select_all') }}</span>
@@ -88,11 +108,11 @@
             <label>{{ trans('cruds.shop.fields.working_hours') }}</label>
             @foreach($days as $day)
                 <div class="form-inline">
-                    <label class="my-1 mr-2">{{ ucfirst($day->name) }}: from</label>
+                    <label class="my-1 mr-2">{{ ucfirst($day->es_name) }}: {{ trans('cruds.shop.from') }}</label>
                     <select class="custom-select my-1 mr-sm-2" name="from_hours[{{ $day->id }}]">
                         <option value="">--</option>
                         @foreach(range(0,23) as $hours)
-                            <option 
+                            <option
                                 value="{{ $hours < 10 ? "0$hours" : $hours }}"
                                 {{ old('from_hours.'.$day->id) == ($hours < 10 ? "0$hours" : $hours) ? 'selected' : '' }}
                             >{{ $hours < 10 ? "0$hours" : $hours }}</option>
@@ -104,11 +124,11 @@
                         <option value="00" {{ old('from_minutes.'.$day->id) == '00' ? 'selected' : '' }}>00</option>
                         <option value="30" {{ old('from_minutes.'.$day->id) == '30' ? 'selected' : '' }}>30</option>
                     </select>
-                    <label class="my-1 mr-2">to</label>
+                    <label class="my-1 mr-2">{{ trans('cruds.shop.to') }}</label>
                     <select class="custom-select my-1 mr-sm-2" name="to_hours[{{ $day->id }}]">
                         <option value="">--</option>
                         @foreach(range(0,23) as $hours)
-                            <option 
+                            <option
                                 value="{{ $hours < 10 ? "0$hours" : $hours }}"
                                 {{ old('to_hours.'.$day->id) == ($hours < 10 ? "0$hours" : $hours) ? 'selected' : '' }}
                             >{{ $hours < 10 ? "0$hours" : $hours }}</option>

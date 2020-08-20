@@ -8,7 +8,7 @@ class CreatePermissionsTable extends Migration
 {
     public function up()
     {
-        Schema::create('permissions', function (Blueprint $table) {
+      /*  Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');
 
             $table->string('title')->nullable();
@@ -17,5 +17,6 @@ class CreatePermissionsTable extends Migration
 
             $table->softDeletes();
         });
+    */
     }
 }

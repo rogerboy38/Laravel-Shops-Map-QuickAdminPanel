@@ -2,85 +2,102 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\MassDestroyUserRequest;
-use App\Http\Requests\StoreUserRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Role;
-use App\User;
-use Gate;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\Controller;
+use App\User;
 
 class UsersController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $users = User::all();
-
-        return view('admin.users.index', compact('users'));
+        $you = auth()->user()->id;
+        $users = DB::table('users')
+        ->select('users.id', 'users.name', 'users.email', 'users.menuroles as roles', 'users.status', 'users.email_verified_at as registered')
+        ->whereNull('deleted_at')
+        ->get();
+        return response()->json( compact('users', 'you') );
     }
 
-    public function create()
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        abort_if(Gate::denies('user_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $roles = Role::all()->pluck('title', 'id');
-
-        return view('admin.users.create', compact('roles'));
+        $user = DB::table('users')
+        ->select('users.id', 'users.name', 'users.email', 'users.menuroles as roles', 'users.status', 'users.email_verified_at as registered')
+        ->where('users.id', '=', $id)
+        ->first();
+        return response()->json( $user );
     }
 
-    public function store(StoreUserRequest $request)
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
     {
-        $user = User::create($request->all());
-        $user->roles()->sync($request->input('roles', []));
-
-        return redirect()->route('admin.users.index');
+        $user = DB::table('users')
+        ->select('users.id', 'users.name', 'users.email', 'users.menuroles as roles', 'users.status')
+        ->where('users.id', '=', $id)
+        ->first();
+        return response()->json( $user );
     }
 
-    public function edit(User $user)
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
     {
-        abort_if(Gate::denies('user_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $roles = Role::all()->pluck('title', 'id');
-
-        $user->load('roles');
-
-        return view('admin.users.edit', compact('roles', 'user'));
+        $validatedData = $request->validate([
+            'name'       => 'required|min:1|max:256',
+            'email'      => 'required|email|max:256'
+        ]);
+        $user = User::find($id);
+        $user->name       = $request->input('name');
+        $user->email      = $request->input('email');
+        $user->save();
+        //$request->session()->flash('message', 'Successfully updated user');
+        return response()->json( ['status' => 'success'] );
     }
 
-    public function update(UpdateUserRequest $request, User $user)
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
     {
-        $user->update($request->all());
-        $user->roles()->sync($request->input('roles', []));
-
-        return redirect()->route('admin.users.index');
-    }
-
-    public function show(User $user)
-    {
-        abort_if(Gate::denies('user_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $user->load('roles');
-
-        return view('admin.users.show', compact('user'));
-    }
-
-    public function destroy(User $user)
-    {
-        abort_if(Gate::denies('user_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
-        $user->delete();
-
-        return back();
-    }
-
-    public function massDestroy(MassDestroyUserRequest $request)
-    {
-        User::whereIn('id', request('ids'))->delete();
-
-        return response(null, Response::HTTP_NO_CONTENT);
+        $user = User::find($id);
+        if($user){
+            $user->delete();
+        }
+        return response()->json( ['status' => 'success'] );
     }
 }

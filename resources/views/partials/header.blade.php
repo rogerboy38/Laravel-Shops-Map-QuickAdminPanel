@@ -1,24 +1,58 @@
-<header id="site-header" class="site-header" role="banner">
-    <div class="container">
-        <div class="site-logo-wrap">
-            <hgroup>
-                <h1 class='site-title site-title-no-desc'> <a  style="color:#FFFFFF;" href='{{ route('home') }}' title='{{ config('app.name', 'Laravel Shops') }}' rel='home'>{{ config('app.name', 'Laravel Shops') }}</a></h1>
-            </hgroup>
+
+<div class="container">
+
+<div id="app">
+
+    <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+        <div class="container">
+          <div><img src="{{asset('/images/favicon.png')}}" class= img-responsive style= height=45px width=45px ></div>
+
+
+            <a class="navbar-brand" href="{{ url('/') }}">
+                  .  AmbADom
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <!-- Left Side Of Navbar -->
+                <ul class="navbar-nav mr-auto"></ul>
+
+
+                <!-- Right Side Of Navbar -->
+                <ul class="navbar-nav ml-auto">
+                    <!-- Authentication Links -->
+                    @guest
+                        <li><a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a></li>
+                        <li><a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a></li>
+                    @else
+                        <li><a class="nav-link" href="{{ route('admin.shops.index') }}">{{Lang::choice('messages.Manage Shops',10)}}</a></li>
+
+                        <li class="nav-item dropdown">
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                {{ Auth::user()->name }} <span class="caret"></span>
+                            </a>
+
+
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('logout') }}"
+                                   onclick="event.preventDefault();
+                                                 document.getElementById('logout-form').submit();">
+                                    {{ __('Logout') }}
+                                </a>
+
+
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                    @csrf
+                                </form>
+                            </div>
+                        </li>
+                    @endguest
+                </ul>
+            </div>
         </div>
-        <nav id="primary-nav" class="primary-nav" role="navigation">
-            <ul id="menu-gd-menu" class="menu">
-                @guest
-                    <li class="gd-menu-item menu-item menu-item-type-post_type_archive"><a href="{{ route('login') }}">Login</a></li>
-                    <li class="gd-menu-item menu-item menu-item-type-post_type_archive"><a href="{{ route('register') }}">Register</a></li>
-                @else
-                    <li class="gd-menu-item menu-item menu-item-type-post_type_archive"><a href="{{ route('admin.shops.index') }}">Manage Shops</a></li>
-                    <li class="gd-menu-item menu-item menu-item-type-post_type_archive"><a href="#" onclick="event.preventDefault(); document.getElementById('logoutform').submit();">Logout</a></li>
-                    <form id="logoutform" action="{{ route('logout') }}" method="POST" style="display: none;">
-                        {{ csrf_field() }}
-                    </form>
-                @endguest
-            </ul>
-        </nav>
-        <div class="dt-nav-toggle  dt-mobile-nav-button-wrap"><a href="#primary-nav"><i class="fas fa-bars"></i></a></div>
-    </div>
-</header>
+    </nav>
+  </div>
+</div>

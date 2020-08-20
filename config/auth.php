@@ -16,6 +16,7 @@ return [
     'defaults' => [
         'guard'     => 'web',
         'passwords' => 'users',
+        'admin' => 'admins',
     ],
 
     /*
@@ -32,6 +33,12 @@ return [
     | mechanisms used by this application to persist your user's data.
     |
     | Supported: "session", "token"
+    |  'api' => [
+    |      'driver'   => 'passport',
+    |      'storage_key'=>'api_key',
+    |      'provider' => 'users',
+    |      'hash'     => false,
+    |  ],
     |
     */
 
@@ -42,9 +49,15 @@ return [
         ],
 
         'api' => [
-            'driver'   => 'passport',
+            'driver' => 'passport',
+            'storage_key'=>'api_key',
             'provider' => 'users',
-            'hash'     => false,
+
+        ],
+        'admin' => [
+            'driver' => 'passport',
+            'provider' => 'admins',
+
         ],
     ],
 
@@ -70,7 +83,10 @@ return [
             'driver' => 'eloquent',
             'model'  => App\User::class,
         ],
-
+        'admins' => [
+            'driver' => 'eloquent',
+            'model'  => App\User::class,
+        ],
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -98,6 +114,16 @@ return [
             'table'    => 'password_resets',
             'expire'   => 60,
         ],
+    ],
+
+    'route' => [
+        'prefix' => 'translations',
+        'middleware' => [
+	        'web',
+	        'auth',
+          'api',
+          'guest',
+		],
     ],
 
 ];

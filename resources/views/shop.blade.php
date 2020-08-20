@@ -7,12 +7,15 @@
             <div class="content-box content-single">
                 <article class="post-180 gd_place type-gd_place status-publish hentry gd_placecategory-hotels">
                     <header>
-                        <h1 class="entry-title">{{ $shop->name }}</h1></header>
+
+                        <h1 class="entry-title">{{ $shop->name }}</h1>
+                    </header>
                     <div class="entry-content entry-summary">
                         @if($shop->photos->count())
                             <div class="geodir-post-slider center-gallery">
                                 <div class="bxslider">
                                     @foreach($shop->photos as $photo)
+                                    return dd($shop);
                                     <div><img src="{{ $photo->url }}"></div>
                                     @endforeach
                                 </div>
@@ -20,9 +23,9 @@
                         @endif
                         @if($shop->categories->count())
                             <div class="geodir-single-taxonomies-container">
-                                <p class="geodir_post_taxomomies clearfix"> 
+                                <p class="geodir_post_taxomomies clearfix">
                                     <span class="geodir-category">
-                                        Categories: 
+                                        {{Lang::get('global.Categories')}} :
                                         @foreach($shop->categories as $category)
                                             <a href="{{ route('home') }}?category={{ $category->id }}">{{ $category->name }}</a>{{ !$loop->last ? ',' : ''  }}
                                         @endforeach
@@ -33,15 +36,15 @@
                         <div class="geodir-single-tabs-container">
                             <div class="geodir-tabs" id="gd-tabs">
                                 <dl class="geodir-tab-head"><dt></dt>
-                                    <dd class="geodir-tab-active"><a data-tab="#post_content" data-status="enable"><i class="fas fa-home" aria-hidden="true"></i>About</a></dd><dt></dt>
+                                    <dd class="geodir-tab-active"><a data-tab="#post_content" data-status="enable"><i class="fas fa-home" aria-hidden="true"></i>{{Lang::get('global.About')}} </a></dd><dt></dt>
                                     @if($shop->photos->count())
-                                        <dd class=""><a data-tab="#post_images" data-status="enable"><i class="fas fa-image" aria-hidden="true"></i>Photos</a></dd><dt></dt>
+                                        <dd class=""><a data-tab="#post_images" data-status="enable"><i class="fas fa-image" aria-hidden="true"></i>{{Lang::get('global.Photos')}}</a></dd><dt></dt>
                                     @endif
                                     @if($shop->latitude && $shop->longitude)
-                                        <dd class=""><a data-tab="#post_map" data-status="enable"><i class="fas fa-globe-americas" aria-hidden="true"></i>Map</a></dd><dt></dt>
+                                        <dd class=""><a data-tab="#post_map" data-status="enable"><i class="fas fa-globe-americas" aria-hidden="true"></i>{{Lang::get('global.Map')}}</a></dd><dt></dt>
                                     @endif
                                     @if($shop->days->count())
-                                        <dd class=""><a data-tab="#working_hours" data-status="enable"><i class="fas fa-clock" aria-hidden="true"></i>Working Hours</a></dd>
+                                        <dd class=""><a data-tab="#working_hours" data-status="enable"><i class="fas fa-clock" aria-hidden="true"></i>{{Lang::get('global.Working Hours')}}</a></dd>
                                     @endif
                                 </dl>
                                 <ul class="geodir-tabs-content geodir-entry-content " style="z-index: 0; position: relative;">
@@ -49,14 +52,15 @@
                                         <div id="geodir-tab-content-post_content" class="hash-offset"></div>
                                         <div class="geodir-post-meta-container">
                                             <div class="geodir_post_meta  geodir-field-post_content">
-                                                <p>Address: {{ $shop->address }}</p>
-                                                <p>Description: {{ $shop->description }}</p>
+                                                <p>{{Lang::get('global.Address')}} : {{ $shop->address }}</p>
+                                                <p>{{Lang::get('global.CountryCode')}} : {{$shop->country_code }}  - {{Lang::get('global.Phone')}} : {{$shop->phone}}</p>
+                                                <p>{{Lang::get('global.Description')}} : {{ $shop->description }}</p>
                                                 @if($shop->days->count())
                                                     @if($shop->working_hours->currentOpenRange(now()))
-                                                        <p>Shop is open and will close at {{ $shop->working_hours->currentOpenRange(now())->end() }}.</p>
+                                                        <p>{{Lang::get('messages.Shop is open and will close at')}} . {{ $shop->working_hours->currentOpenRange(now())->end() }}.</p>
                                                     @else
-                                                        <p>Shop is closed since {{ $shop->working_hours->previousClose(now())->format('l H:i') }}
-                                                            and will re-open at {{ $shop->working_hours->nextOpen(now())->format('l H:i') }}</p>
+                                                        <p>{{Lang::get('messages.Shop is closed since')}} : {{trans("voyager.days.".$shop->working_hours->previousClose(now())->format('l'))}}  {{ $shop->working_hours->previousClose(now())->format(' H:i') }} Hrs.
+                                                            {{Lang::get('messages.and will re-open at')}} : {{trans("voyager.days.".$shop->working_hours->nextOpen(now())->format('l'))}}  {{ $shop->working_hours->nextOpen(now())->format(' H:i') }} Hrs.</p>
                                                     @endif
                                                 @endif
                                                 <p></p>
@@ -72,7 +76,7 @@
                                                         <ul class="geodir-gallery geodir-images clearfix">
                                                             @foreach($shop->photos as $photo)
                                                                 <li>
-                                                                    <a href="{{ $photo->getUrl() }}" class="geodir-lightbox-image" target="_blank"><img src="{{ $photo->getUrl('thumb') }}" width="1440" height="960"><i class="fas fa-search-plus" aria-hidden="true"></i></a>
+                                                                    <a href="{{ $photo->getUrl() }} " class="geodir-lightbox-image" target="_blank"><img src="{{ $photo->getUrl('thumb') }}" width="1440" height="960"><i class="fas fa-search-plus" aria-hidden="true"></i></a>
                                                                 </li>
                                                             @endforeach
                                                         </ul>
@@ -90,7 +94,8 @@
                                     @if($shop->days->count())
                                         <li id="working_hoursTab" style="display: none;">
                                             @foreach($shop->days as $day)
-                                                <p>{{ ucfirst($day->name) }}: from {{ $day->pivot->from_hours }}:{{ $day->pivot->from_minutes }} to {{ $day->pivot->to_hours }}:{{ $day->pivot->to_minutes }}</p>
+
+                                                <p>{{ ucfirst($day->es_name) }}: from {{($day->es_name)}} /{{ $day->pivot->from_hours }}:{{ $day->pivot->from_minutes }} to {{ $day->pivot->to_hours }}:{{ $day->pivot->to_minutes }}</p>
                                             @endforeach
                                         </li>
                                     @endif
@@ -100,7 +105,7 @@
                         <div class="geodir-single-taxonomies-container">
                             <div class="geodir-pos_navigation clearfix">
                                 <div class="geodir-post_left">
-                                    <a href="{{ url()->previous() }}" rel="prev">Back</a>
+                                    <a href="{{ url()->previous() }}" rel="prev">{{Lang::get('pagination.Back')}}</a>
                                 </div>
                             </div>
                         </div>

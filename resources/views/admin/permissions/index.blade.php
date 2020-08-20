@@ -26,6 +26,9 @@
                             {{ trans('cruds.permission.fields.id') }}
                         </th>
                         <th>
+                            {{ trans('cruds.permission.fields.name') }}
+                        </th>
+                        <th>
                             {{ trans('cruds.permission.fields.title') }}
                         </th>
                         <th>
@@ -41,6 +44,9 @@
                             </td>
                             <td>
                                 {{ $permission->id ?? '' }}
+                            </td>
+                            <td>
+                                {{ $permission->name ?? '' }}
                             </td>
                             <td>
                                 {{ $permission->title ?? '' }}

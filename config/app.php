@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Ambulante A Domicilio'),
 
     /*
     |--------------------------------------------------------------------------
@@ -52,7 +52,10 @@ return [
     |
     */
 
+
     'url' => env('APP_URL', 'http://localhost'),
+    'asset_img' => env('ASSET_IMG', 'http://localhost'),
+
 
     'asset_url' => env('ASSET_URL', null),
 
@@ -67,7 +70,7 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    'timezone' => 'America/Mexico_City',
 
     /*
     |--------------------------------------------------------------------------
@@ -80,7 +83,8 @@ return [
     |
     */
 
-    'locale' => 'en',
+
+    'locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -93,7 +97,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -106,7 +110,7 @@ return [
     |
     */
 
-    'faker_locale' => 'en_US',
+    'faker_locale' => 'es',
 
     /*
     |--------------------------------------------------------------------------
@@ -162,10 +166,14 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 
+
         /*
          * Package Service Providers...
          */
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Laraveles\Spanish\SpanishServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
+
 
         /*
          * Application Service Providers...
@@ -175,6 +183,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+      //  Spatie\Permission\PermissionServiceProvider::class,
+
+        //App\Repositories\FoldersAndFiles\FoldersAndFilesInterface::class,
+
+        //App\Providers\MobileDetectServiceProvider::class,
 
     ],
 
@@ -227,7 +240,16 @@ return [
         'Validator'    => Illuminate\Support\Facades\Validator::class,
         'View'         => Illuminate\Support\Facades\View::class,
         'Bugsnag'      => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        'auth'         => App\Http\Middleware\Authenticate::class,
+        'client_credentials' => Laravel\Passport\Http\Middleware\CheckClientCredentials::class,
+
+
 
     ],
+
+    'braintree_environment'       =>'debug',
+    'app.braintree_merchant_id'   =>'6gxmj7j7bkd8jhdj',
+    'app.braintree_public_key'    =>'dv78kbwj6whh4fbv',
+    'app.braintree_private_key'   => 'bb9ed9d5ffdfb291fded5f96b583a601',
 
 ];

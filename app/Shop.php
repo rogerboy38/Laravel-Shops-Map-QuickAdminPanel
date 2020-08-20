@@ -9,10 +9,13 @@ use Spatie\MediaLibrary\HasMedia\HasMedia;
 use Spatie\MediaLibrary\HasMedia\HasMediaTrait;
 use Spatie\MediaLibrary\Models\Media;
 use Spatie\OpeningHours\OpeningHours;
+use TCG\Voyager\Traits\Translatable;
+
 
 class Shop extends Model implements HasMedia
 {
     use SoftDeletes, MultiTenantModelTrait, HasMediaTrait;
+    use Translatable;
 
     public $table = 'shops';
 
@@ -30,6 +33,8 @@ class Shop extends Model implements HasMedia
         'name',
         'active',
         'address',
+        'country_code',
+        'phone',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -41,6 +46,7 @@ class Shop extends Model implements HasMedia
 
     public function registerMediaConversions(Media $media = null)
     {
+        //return dd($this);
         $this->addMediaConversion('thumb')->width(325)->height(210);
     }
 

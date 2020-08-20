@@ -5,7 +5,7 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    Dashboard
+                    {{__(messages.dashboard}}
                 </div>
 
                 <div class="card-body">
@@ -15,7 +15,7 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    {{__(messages.You_are_logged_in!')}}
                 </div>
             </div>
         </div>

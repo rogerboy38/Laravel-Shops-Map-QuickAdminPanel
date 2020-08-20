@@ -12,10 +12,16 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
 use Laravel\Passport\HasApiTokens;
+use TCG\Voyager\Traits\Translatable;
+use Illuminate\Support\Facades\Auth;
+use DB;
+
+
 
 class User extends Authenticatable
 {
     use SoftDeletes, Notifiable, HasApiTokens;
+    use Translatable;
 
     public $table = 'users';
 
@@ -84,5 +90,23 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    public function setRole($value)
+        {
+            $role_id = DB::table('roles')->where('title',$value)->first();
+            //return dd($role_id->id);
+            DB::table('role_user')->insert([
+            'user_id' => $this->id,
+            'role_id' => $role_id->id
+            ]);
+
+            return $this->belongsToMany(Role::class);
+
+        }
+
+    public function getAvatarUrlAttribute()
+    {
+        return Storage::url('avatars/'.$this->id.'/'.$this->avatar);
     }
 }

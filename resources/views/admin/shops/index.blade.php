@@ -35,6 +35,12 @@
                             {{ trans('cruds.shop.fields.photos') }}
                         </th>
                         <th>
+                            {{Lang::get('global.CountryCode')}}
+                        </th>
+                        <th>
+                            {{Lang::get('global.Phone')}}
+                        </th>
+                        <th>
                             {{ trans('cruds.shop.fields.address') }}
                         </th>
                         <th>
@@ -69,6 +75,12 @@
                                     </a>
                                 @endforeach
                             </td>
+                            <td>
+                               {{$shop->country_code ?? '' }}
+                            </td>
+                            <td>
+                               {{$shop->phone ?? '' }}
+                             </td>
                             <td>
                                 {{ $shop->address ?? '' }}
                             </td>

@@ -4,10 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use TCG\Voyager\Traits\Translatable;
+
 
 class Permission extends Model
 {
     use SoftDeletes;
+    use Translatable;
 
     public $table = 'permissions';
 
@@ -18,6 +21,7 @@ class Permission extends Model
     ];
 
     protected $fillable = [
+        'name',
         'title',
         'created_at',
         'updated_at',

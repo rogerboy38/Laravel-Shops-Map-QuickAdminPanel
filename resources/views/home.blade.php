@@ -7,7 +7,7 @@
             <div class="content-box content-single">
                 <article class="post-8 page type-page status-publish hentry">
                     <header>
-                        <h1 class="entry-title">{{ request()->filled('search') || request()->filled('category') ? 'Search results' : 'All Shops' }}</h1></header>
+                        <h1 class="entry-title">{{ request()->filled('search') || request()->filled('category') ? 'Resultados de la Busqueda' : 'Todas las Tiendas' }}</h1></header>
                     <div class="entry-content entry-summary">
                         <div class="geodir-search-container geodir-advance-search-default" data-show-adv="default">
                             <form class="geodir-listing-search gd-search-bar-style" name="geodir-listing-search" action="{{ route('home') }}" method="get">
@@ -16,14 +16,14 @@
                                         <div class="geodir-search">
                                             <div class='gd-search-input-wrapper gd-search-field-cpt gd-search-field-taxonomy gd-search-field-categories'>
                                                 <select name="category" class="cat_select">
-                                                    <option value="">Category</option>
+                                                    <option value="">{{Lang::get('global.category')}}</option>
                                                     @foreach($categories as $category)
                                                         <option value="{{ $category->id }}"{{ old('category', request()->input('category')) == $category->id ? ' selected' : '' }}>{{ $category->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class='gd-search-input-wrapper gd-search-field-search'> <span class="geodir-search-input-label"><i class="fas fa-search gd-show"></i><i class="fas fa-times geodir-search-input-label-clear gd-hide" title="Clear field"></i></span>
-                                                <input class="search_text gd_search_text" name="search" value="{{ old('search', request()->input('search')) }}" type="text" placeholder="Search for" aria-label="Search for" autocomplete="off" />
+                                                <input class="search_text gd_search_text" name="search" value="{{ old('search', request()->input('search')) }}" type="text" placeholder="{{Lang::get('global.search_for')}}" aria-label="Search for" autocomplete="off" />
                                             </div>
                                             <button class="geodir_submit_search" data-title="fas fa-search" aria-label="fas fa-search"><i class="fas fas fa-search" aria-hidden="true"></i><span class="sr-only">Search</span></button>
                                         </div>
@@ -62,13 +62,13 @@
                                                 <div class="geodir-post-meta-container">
                                                     <div class="geodir_post_meta gd-bh-show-field gd-lv-s-2 geodir-field-business_hours gd-bh-toggled gd-bh-{{ $shop->working_hours->isOpen() ? 'open' : 'close' }}" style="clear:both;">
                                                         <span class="geodir-i-business_hours geodir-i-biz-hours">
-                                                            <i class="fas fa-clock" aria-hidden="true"></i><font>{{ $shop->working_hours->isOpen() ? 'Opened' : 'Closed' }} now</font>
+                                                            <i class="fas fa-clock" aria-hidden="true"></i><font>{{ $shop->working_hours->isOpen() ? 'Abierto' : 'Cerrado' }} ahora</font>
                                                         </span>
                                                     </div>
                                                 </div>
                                             @endif
                                             <div class="geodir-post-content-container">
-                                                <div class="geodir_post_meta  geodir-field-post_content" style='max-height:120px;overflow:hidden;'>{{ $shop->description }} <a href='{{ route('shop', $shop->id) }}' class='gd-read-more  gd-read-more-fade'>Read more...</a></div>
+                                                <div class="geodir_post_meta  geodir-field-post_content" style='max-height:120px;overflow:hidden;'>{{ $shop->description }} <a href='{{ route('shop', $shop->id) }}' class='gd-read-more  gd-read-more-fade'>{{Lang::get('global.Read more')}}...</a></div>
                                             </div>
                                         </div>
                                     </li>

@@ -34,6 +34,7 @@ class CategoriesApiController extends Controller
         abort_if(Gate::denies('category_show'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         return new CategoryResource($category);
+        
     }
 
     public function update(UpdateCategoryRequest $request, Category $category)
